@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add Words
+{% endblock %}
+
+{% block main %}
+    <form method="post">
+        <div class="card mx-auto col-6">
+            <div class="card-header bg-dark text-white">
+                <span class="card-title">Add new Words</span>
+            </div>
+            <div class="card-body">
+                <div class="form-inline">
+                    <label for="ending">Enter the ending of the rhym: &nbsp;</label>
+                    <input type="text" name="ending" autofocus id="ending" class="form-control col-3">&nbsp;
+                    <button onclick="add_words()" type="reset" class="btn btn-primary">Continue!</button>
+                </div><br>
+                <div id="adding_div" style="display: none;">
+                    <p class="alert alert-primary text-center">Add words for <var id="ending_value"></var></p>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-2">
+                            <label for="word">Word</label>
+                            <input type="text" id="word" class="form-control">&nbsp;
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="meaning">Meaning</label>
+                            <input type="text" id="meaning" class="form-control">
+                        </div>
+                        <div class="col-md-2 mb-1">
+                            <label for="btn"></label>
+                            <input type="button" class="btn btn-outline-success form-control" onclick="add_word()" value="Add">
+                        </div>
+                    </div><br>
+                    <div id="words_div"></div>
+                    <button class="btn btn-block btn-success">Add Words!</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <script>
+        function add_words() {
+            var ending = document.getElementById('ending');
+            if (ending.value === '') {
+                alert('Please enter a value');
+                return;
+            }
+            var ending_value = ending.value;
+            document.getElementById('ending_value').innerHTML = ending_value;
+            ending.setAttribute('readonly', true);
+            setTimeout(() => {
+                ending.value = ending_value;
+            }, 100);
+            document.getElementById('adding_div').style.display = '';
+            document.getElementById('word').focus();
+        }
+
+        function add_word() {
+            var get_word = document.getElementById('word');
+            var get_meaning = document.getElementById('meaning');
+            if (get_word.value === '' || get_meaning.value === '') {alert('Enter a Word and meaning!'); return;}
+            element = document.getElementById('words_div');
+            var division = document.createElement('div');
+            division.classList = 'alert alert-success alert-dismissible fade show col-12';
+            division.setAttribute('role', 'alert');
+            var word = document.createElement('input');
+            word.classList = 'btn badge-pill btn-primary col-3'
+            word.setAttribute('readonly', true);
+            word.setAttribute('name', 'word');
+            word.value = get_word.value;
+            var meaning = document.createElement('input');
+            meaning.classList = 'btn badge-pill btn-primary col-8';
+            meaning.setAttribute('readonly', true);
+            meaning.setAttribute('name', 'meaning');
+            meaning.value = get_meaning.value;
+            var close_button = document.createElement('button');
+            close_button.classList.add('close');
+            close_button.setAttribute('data-dismiss', 'alert');
+            close_button.setAttribute('aria-label', 'Close');
+            var times = document.createElement('span');
+            times.setAttribute('aria-hidden', 'true');
+            times.appendChild(document.createTextNode('\u00d7'));
+            close_button.appendChild(times);
+            division.appendChild(word);
+            division.appendChild(document.createTextNode('\u00A0'))
+            division.appendChild(meaning);
+            division.appendChild(close_button);
+            element.appendChild(division);
+            get_word.value = '';
+            get_meaning.value = '';
+            get_word.focus();
+        }
+
+        document.getElementById('meaning').addEventListener('keypress', (e) => {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                e.stopPropagation();
+                add_word();
+            }
+        });
+        document.getElementById('ending').addEventListener('keypress', (e) => {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                e.stopPropagation();
+                add_words();
+            }
+        });
+
+    
+    </script>
+{% endblock %}

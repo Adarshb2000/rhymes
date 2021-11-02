@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    <div class="card col-6 mx-auto">
+        <div class="card-header bg-dark text-white">
+            <span class="card-title">Welcome to Rhymes.</span>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="query">Search Word</label>
+                <input type="text" name="query" value="aya" id="query" class="form-control col-6"><br>
+                <button class="btn btn-success" id="ending" onclick="get_words()">Get Rhyming Words!</button>
+            </div>
+            <div class="card-body" id="words">
+
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="/add_words" class="btn btn-block btn-primary">Add words!</a>
+        </div>
+    </div>
+
+    <script>
+        function get_words() {
+            var ending = document.getElementById('query');
+            if (ending.value === '') {
+                alert('Please enter an ending to search!');
+                return;
+            }
+            $.get('/get_words?ending=' + ending.value, (data) => {
+                document.getElementById('words').innerHTML = data;
+            })
+        }
+    </script>
+    
+{% endblock %}
